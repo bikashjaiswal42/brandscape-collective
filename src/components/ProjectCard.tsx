@@ -35,12 +35,13 @@ const ProjectCard = ({ project, index, onView }: ProjectCardProps) => {
     >
       <div className="brand-card rounded-2xl overflow-hidden brand-hover-glow transition-all duration-500 group-hover:scale-[1.02]">
         {/* Image Container */}
-        <div className="relative h-64 bg-gradient-to-br from-brand-muted/10 to-brand-accent/10 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-gold/20 to-brand-accent/20 flex items-center justify-center">
-            <div className="text-6xl font-bold text-brand-gold/30">
-              {project.title.charAt(0)}
-            </div>
-          </div>
+        <div className="relative h-64 overflow-hidden">
+          <img 
+            src={project.image} 
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent" />
           
           {/* Hover overlay */}
           <motion.div

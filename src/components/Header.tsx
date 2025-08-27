@@ -1,8 +1,22 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LogIn, User } from "lucide-react";
+import AuthModal from "./AuthModal";
 
 const Header = () => {
+  const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: "login" | "signup" }>({
+    isOpen: false,
+    mode: "login"
+  });
+
+  const openAuthModal = (mode: "login" | "signup") => {
+    setAuthModal({ isOpen: true, mode });
+  };
+
+  const closeAuthModal = () => {
+    setAuthModal({ isOpen: false, mode: "login" });
+  };
   return (
     <motion.header 
       initial={{ opacity: 0, y: -20 }}
@@ -40,6 +54,7 @@ const Header = () => {
             variant="ghost" 
             size="sm"
             className="text-brand-muted hover:text-brand-gold hover:bg-brand-accent/20"
+            onClick={() => openAuthModal("login")}
           >
             <LogIn className="w-4 h-4 mr-2" />
             Login
@@ -47,12 +62,19 @@ const Header = () => {
           <Button 
             size="sm"
             className="brand-button-primary"
+            onClick={() => openAuthModal("signup")}
           >
             <User className="w-4 h-4 mr-2" />
             Sign Up
           </Button>
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={authModal.isOpen}
+        onClose={closeAuthModal}
+        initialMode={authModal.mode}
+      />
     </motion.header>
   );
 };

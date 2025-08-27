@@ -1,8 +1,17 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ProjectCard from "./ProjectCard";
+import ProjectDetailModal from "./ProjectDetailModal";
 import { Button } from "@/components/ui/button";
 import { Filter, Grid, List } from "lucide-react";
+
+// Import project images
+import noveltyJewelry from "@/assets/novelty-jewelry.jpg";
+import greentechSolutions from "@/assets/greentech-solutions.jpg";
+import artisanCoffee from "@/assets/artisan-coffee.jpg";
+import zenithArchitecture from "@/assets/zenith-architecture.jpg";
+import lunaWellness from "@/assets/luna-wellness.jpg";
+import velocitySports from "@/assets/velocity-sports.jpg";
 
 // Mock data - will be replaced with database data
 const mockProjects = [
@@ -13,7 +22,7 @@ const mockProjects = [
     description: "Elegant brand identity for premium imitation jewelry brand focusing on sophistication and affordability.",
     colors: ["#FFD700", "#1A1A1A", "#2D5016", "#C5A572"],
     tags: ["Luxury", "Jewelry", "Retail", "Gold", "Premium"],
-    image: "/api/placeholder/400/300",
+    image: noveltyJewelry,
     featured: true
   },
   {
@@ -23,7 +32,7 @@ const mockProjects = [
     description: "Sustainable technology company branding with eco-friendly color palette and modern typography.",
     colors: ["#22C55E", "#1F2937", "#10B981", "#065F46"],
     tags: ["Technology", "Eco", "Sustainable", "Modern"],
-    image: "/api/placeholder/400/300"
+    image: greentechSolutions
   },
   {
     id: "3",
@@ -32,7 +41,7 @@ const mockProjects = [
     description: "Artisanal coffee brand with rustic charm and premium positioning in the specialty coffee market.",
     colors: ["#A0522D", "#8B4513", "#DEB887", "#2F1B14"],
     tags: ["Coffee", "Artisan", "Premium", "Rustic"],
-    image: "/api/placeholder/400/300"
+    image: artisanCoffee
   },
   {
     id: "4",
@@ -41,7 +50,7 @@ const mockProjects = [
     description: "Modern architectural firm branding emphasizing clean lines, innovation, and sustainable design.",
     colors: ["#374151", "#6B7280", "#F3F4F6", "#111827"],
     tags: ["Architecture", "Modern", "Clean", "Professional"],
-    image: "/api/placeholder/400/300"
+    image: zenithArchitecture
   },
   {
     id: "5",
@@ -50,7 +59,7 @@ const mockProjects = [
     description: "Luxury spa and wellness center with calming colors and serene brand positioning.",
     colors: ["#E0E7FF", "#8B5CF6", "#A78BFA", "#4C1D95"],
     tags: ["Wellness", "Spa", "Luxury", "Calming"],
-    image: "/api/placeholder/400/300",
+    image: lunaWellness,
     featured: true
   },
   {
@@ -60,7 +69,7 @@ const mockProjects = [
     description: "Dynamic sports brand with energetic color scheme and bold typography for athletic performance.",
     colors: ["#EF4444", "#DC2626", "#FEE2E2", "#991B1B"],
     tags: ["Sports", "Dynamic", "Energy", "Performance"],
-    image: "/api/placeholder/400/300"
+    image: velocitySports
   }
 ];
 
@@ -69,10 +78,17 @@ const categories = ["All", "Luxury Retail", "Technology", "Food & Beverage", "Ar
 const ProjectShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedProject, setSelectedProject] = useState<typeof mockProjects[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredProjects = selectedCategory === "All" 
     ? mockProjects 
     : mockProjects.filter(project => project.category === selectedCategory);
+
+  const handleViewProject = (project: typeof mockProjects[0]) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
 
   return (
     <section id="showcase" className="py-20 bg-background">
@@ -157,7 +173,7 @@ const ProjectShowcase = () => {
               key={project.id}
               project={project}
               index={index}
-              onView={(project) => console.log("View project:", project)}
+              onView={handleViewProject}
             />
           ))}
         </motion.div>
@@ -175,6 +191,12 @@ const ProjectShowcase = () => {
           </Button>
         </motion.div>
       </div>
+
+      <ProjectDetailModal
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 };

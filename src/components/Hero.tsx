@@ -1,10 +1,27 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import AuthModal from "./AuthModal";
+import heroBackground from "@/assets/hero-background.jpg";
 
 const Hero = () => {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  const scrollToShowcase = () => {
+    const showcaseSection = document.getElementById('showcase');
+    showcaseSection?.scrollIntoView({ behavior: 'smooth' });
+  };
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBackground})` }}
+      >
+        <div className="absolute inset-0 bg-brand-dark/70" />
+      </div>
+
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -71,7 +88,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.0 }}
           >
-            <Button size="lg" className="brand-button-primary group">
+            <Button size="lg" className="brand-button-primary group" onClick={scrollToShowcase}>
               Explore Projects
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
@@ -79,8 +96,9 @@ const Hero = () => {
               variant="outline" 
               size="lg"
               className="brand-button-secondary"
+              onClick={() => setAuthModalOpen(true)}
             >
-              View Style Guides
+              Join Community
             </Button>
           </motion.div>
         </motion.div>
@@ -112,6 +130,12 @@ const Hero = () => {
           </div>
         </motion.div>
       </div>
+
+      <AuthModal 
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        initialMode="signup"
+      />
     </section>
   );
 };
